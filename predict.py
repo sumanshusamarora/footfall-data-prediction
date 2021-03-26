@@ -10,7 +10,7 @@ import pandas as pd
 
 from clean_and_prepare_data import get_weather_data
 
-def get_prediction(days_plus_today):
+def get_prediction(days_plus_today, model_name):
     """
 
     :param days_plus_today:
@@ -46,7 +46,7 @@ def get_prediction(days_plus_today):
     for col in df.columns:
         df.loc[0, col] = data_dict[col]
 
-    model = joblib.load('models/linear_regression.pkl')
+    model = joblib.load(f'models/{model_name}')
     return (prediction_date, model.predict(df)[0])
 
 
@@ -59,9 +59,17 @@ if __name__ == "__main__":
         type=int,
         help="How many days in future",
     )
+    parser.add_argument(
+        "--model-name",
+        dest="model_name",
+        default="linear_regression.pkl",
+        type=str,
+        help="Model Name",
+    )
 
     args = parser.parse_args()
-    prediction_date, prediction_value = get_prediction(args.days_in_future)
+    prediction_date, prediction_value = get_prediction(args.days_in_future, args.model_name)
     print(f"Expected footfall for {prediction_date.date()} is {int(prediction_value)}")
 
-# python predict.py
+# python predict.py --days-in-future 0 --model-name "linear_regression.pkl"
+# python predict.py --days-in-future 0 --model-name "linear_svr.pkl"
