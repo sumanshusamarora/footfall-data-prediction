@@ -1,0 +1,11 @@
+name: footfall
+dependencies:
+  - pandas
+  - pip
+  - python=3.8
+  - numpy
+  - requests
+  - scikit-learn
+  - matplotlib
+  - pip:
+      - holidays
